@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Result</title>
+</head>
+<body>
+    <h1>Search Result</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Document ID</th>
+                <th>Score</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result_item in result[:20] %}
+                <tr>
+                    <td>{{ result_item[0] }}</td>
+                    <td>{{ result_item[1] }}</td>
+                    <td><a href="#" onclick="executeFunction('{{ result_item[0] }}')">Icon</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('main.index') }}">Back to Search</a>
+
+    <script type="text/javascript">
+        function executeFunction(documentId) {
+            // يمكنك إرسال طلب AJAX هنا لتنفيذ الوظيفة المطلوبة في الواجهة الخلفية
+            // مثال بسيط:
+            fetch('/execute_function', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ documentId: documentId }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // يمكنك إجراء الإجراءات المطلوبة بعد استلام الاستجابة هنا
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+        }
+    </script>
+</body>
+</html>
